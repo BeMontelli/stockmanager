@@ -18,21 +18,19 @@ import TheTitle from "@/components/partials/TheTitle.vue";
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  section.about .page___icon{
-    display: block;
-    text-align: center;
-    padding: 40px 0 0;
-    color: white;
-    font-size: 40px;
-  }
-  section.about .page___content h2{
-    text-align: center;
-    padding: 20px 0 40px;
-  }
-  section.about .page___content p,
-  section.about .page___content li{
-    padding: 0 0 20px;
-  }
+section.about .page___icon{
+  display: block;
+  text-align: center;
+  padding: 40px 0 0;
+  color: white;
+  font-size: 40px;
+}
+section.about .page___content h2{
+  text-align: center;
+  padding: 20px 0 40px;
+}
+section.about .page___content p,
+section.about .page___content li{
+  padding: 0 0 20px;
 }
 </style>

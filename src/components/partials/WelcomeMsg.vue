@@ -46,4 +46,9 @@ defineProps({
   text-align: center;
   padding: 20px 0 40px;
 }
+.page___welcome_msg >>> h2,
+.page___welcome_msg >>> p,
+.page___welcome_msg >>> li{
+  padding: 0 0 20px;
+}
 </style>
