@@ -1,3 +1,7 @@
+<script setup>
+import TheTitle from "@/components/partials/TheTitle.vue";
+</script>
+
 <template>
   <section class="about">
     <TheTitle msg="About" />
@@ -10,10 +14,3 @@
   }
 }
 </style>
-
-<script>
-import TheTitle from "@/components/partials/TheTitle.vue";
-export default {
-  components: {TheTitle}
-}
-</script>
