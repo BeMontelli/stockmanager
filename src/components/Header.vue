@@ -1,5 +1,8 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -11,8 +14,9 @@
         <ul>
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/about">About</RouterLink>
-          <RouterLink to="/login">Login</RouterLink>
-          <RouterLink to="/register">Register</RouterLink>
+          <RouterLink v-if="!authStore.isAuthenticated" to="/login">Login</RouterLink>
+          <RouterLink v-if="!authStore.isAuthenticated" to="/register">Register</RouterLink>
+          <RouterLink v-if="authStore.isAuthenticated" to="/logout">Logout</RouterLink>
         </ul>
       </nav>
     </div>

@@ -8,6 +8,8 @@ const router = useRouter();
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
+if (authStore.isAuthenticated) router.push('/');
+
 const formData = ref({
   email: '',
   password: ''
@@ -24,9 +26,9 @@ const login = async () => {
       errors.value = ["Error, please retry later !"];
     }
   } catch (err) {
+    console.error('Error logging in:', err);
     errors.value = [err.message];
     if(err.response.data.message) errors.value = [err.response.data.message];
-    //console.error('Error logging in:', err);
   }
 };
 </script>

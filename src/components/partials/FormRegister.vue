@@ -8,6 +8,8 @@ const router = useRouter();
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
+if (authStore.isAuthenticated) router.push('/');
+
 const formData = ref({
   name: '',
   email: '',
@@ -28,11 +30,11 @@ const login = async () => {
       errors.value = ["Error, please retry later !"];
     }
   } catch (err) {
+    console.error('Error register :', err);
     errors.value = [err.message];
     if(err.response.data.errors) {
       errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
     }
-    //console.error('Error register :', err);
   }
 };
 </script>
