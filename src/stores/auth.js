@@ -15,20 +15,16 @@ export const useAuthStore = defineStore({
       this.persistState();
     },
     logout() {
-      console.log("logout");
       this.user = null;
       this.token = null;
       this.isAuthenticated = false;
       this.persistState();
     },
     persistState() {
-      console.log("persistState",JSON.stringify(this.$state));
       localStorage.setItem('authStore', JSON.stringify(this.$state));
     },
     initState() {
-      console.log("initState");
       const savedState = localStorage.getItem('authStore');
-      console.log(savedState);
       if (savedState) {
         const parsedState = JSON.parse(savedState);
         Object.assign(this.$state, parsedState);

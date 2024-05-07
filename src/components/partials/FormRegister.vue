@@ -19,8 +19,6 @@ const errors = ref([]);
 const login = async () => {
   try {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/register', formData.value);
-    console.log(response);
-    //console.log('Register successful');
     if(response.data.data.user && response.data.data.token) {
       authStore.setUser(response.data.data.user,response.data.data.token);
       router.push('/');
