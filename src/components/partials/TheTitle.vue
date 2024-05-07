@@ -8,11 +8,40 @@ defineProps({
 </script>
 
 <template>
-  <h1 class="page__title">{{ msg }}</h1>
+  <section class="page__title_area">
+    <h1 class="page__title">{{ msg }}</h1>
+  </section>
 </template>
 
 <style scoped>
+.page__title_area{
+  text-align: center;
+}
 .page__title{
-  color: floralwhite;
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+  color: hsl(11, 92%, 65%);
+  display: inline-block;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.page__title:before,.page__title:after{
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  width: 200px;
+  border-radius: 3px;
+  background-color: hsl(11, 92%, 65%);
+}
+.page__title:before{
+  right: 100%;
+  background-color: #06BBC8;
+}
+.page__title:after{
+  left: 100%;
+  background-color: #86D610;
 }
 </style>
