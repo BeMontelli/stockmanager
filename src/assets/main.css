@@ -3,7 +3,7 @@
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   font-weight: normal;
 }
 
@@ -13,6 +13,14 @@ a,
   color: hsl(11, 92%, 65%);
   transition: 0.4s;
   padding: 3px;
+}
+
+.dark-input {
+  background-color: #333;
+  color: #fff; /* Text color for better readability */
+}
+.dark-input::placeholder {
+  color: hsl(0, 0%, 46%); /* Text color for better readability */
 }
 
 @media (hover: hover) {
@@ -29,6 +37,6 @@ a,
   }
 
   #app {
-    padding: 0 2rem;
+    padding: 0 1rem;
   }
 }

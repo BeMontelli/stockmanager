@@ -9,7 +9,9 @@ defineProps({
 
 <template>
   <section class="page__title_area">
-    <h1 class="page__title">{{ msg }}</h1>
+    <div class="container">
+      <h1 class="page__title">{{ msg }}</h1>
+    </div>
   </section>
 </template>
 
