@@ -23,6 +23,20 @@ a,
   color: hsl(0, 0%, 46%); /* Text color for better readability */
 }
 
+.btn{
+  background-color: hsl(11, 92%, 65%);
+  border-color: hsl(11, 92%, 65%);
+}
+.btn:hover{
+  background-color: hsl(184, 94%, 40%);
+  border-color: hsl(184, 94%, 40%);
+}
+
+.no-marker-ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsl(20, 65%, 15%);

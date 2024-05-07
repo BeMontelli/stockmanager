@@ -3,20 +3,24 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const formData = ref({
+  name: '',
   email: '',
-  password: ''
+  password: '',
+  password_confirmation: '',
 });
 const errors = ref([]);
 
 const login = async () => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/login', formData.value);
+    const response = await axios.post('http://127.0.0.1:8000/api/v1/register', formData.value);
     console.log(response);
-    //console.log('Login successful');
+    //console.log('Register successful');
   } catch (err) {
     errors.value = [err.message];
-    if(err.response.data.message) errors.value = [err.response.data.message];
-    //console.error('Error logging in:', err);
+    if(err.response.data.errors) {
+      errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
+    }
+    //console.error('Error register :', err);
   }
 };
 </script>
@@ -32,8 +36,16 @@ const login = async () => {
             <input v-model="formData.email" type="email" class="form-control dark-input" id="email" name="email" placeholder="Enter email">
           </div>
           <div class="form-group mt-2">
+            <label for="password">Name</label>
+            <input v-model="formData.name" type="text" class="form-control dark-input" id="name" name="name" placeholder="Your Name">
+          </div>
+          <div class="form-group mt-2">
             <label for="password">Password</label>
             <input v-model="formData.password" type="password" class="form-control dark-input" id="password" name="password" placeholder="Password">
+          </div>
+          <div class="form-group mt-2">
+            <label for="password">Password Confirmation</label>
+            <input v-model="formData.password_confirmation" type="password" class="form-control dark-input" id="password_confirmation" name="password_confirmation" placeholder="Same password">
           </div>
 
           <div v-if="errors.length > 0" class="errors">
@@ -47,7 +59,7 @@ const login = async () => {
           </div>
 
           <div class="form-group mt-4 mx-auto d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Register</button>
           </div>
         </form>
       </div>
