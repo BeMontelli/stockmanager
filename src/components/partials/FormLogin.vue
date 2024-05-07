@@ -8,8 +8,6 @@ const router = useRouter();
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
-if (authStore.isAuthenticated) router.push('/');
-
 const formData = ref({
   email: '',
   password: ''
