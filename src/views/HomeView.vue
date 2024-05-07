@@ -1,9 +1,18 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import TheTitle from "@/components/partials/TheTitle.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <section class="home">
+      <TheTitle msg="Home" />
+    </section>
   </main>
 </template>
+
+<style>
+@media (min-width: 1024px) {
+  section.home {
+  }
+}
+</style>

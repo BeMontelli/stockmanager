@@ -1,16 +1,15 @@
 <template>
-  <section class="about">
-    <TheTitle msg="About" />
+  <section class="register">
+    <TheTitle msg="Register" />
   </section>
 </template>
 
 <style>
 @media (min-width: 1024px) {
-  section.about {
+  section.register {
   }
 }
 </style>
-
 <script>
 import TheTitle from "@/components/partials/TheTitle.vue";
 export default {
