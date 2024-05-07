@@ -2,6 +2,12 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+
 const formData = ref({
   name: '',
   email: '',
@@ -15,6 +21,12 @@ const login = async () => {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/register', formData.value);
     console.log(response);
     //console.log('Register successful');
+    if(response.data.data.user && response.data.data.token) {
+      authStore.setUser(response.data.data.user,response.data.data.token);
+      router.push('/');
+    } else {
+      errors.value = ["Error, please retry later !"];
+    }
   } catch (err) {
     errors.value = [err.message];
     if(err.response.data.errors) {

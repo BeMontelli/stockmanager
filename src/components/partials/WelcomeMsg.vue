@@ -11,7 +11,6 @@ onMounted(() => {
 const fetchWelcomeMessage = () => {
   axios.get('http://127.0.0.1:8000/api/v1/welcome')
       .then(response => {
-        console.log(response.data.title);
         welcomeMessage.value = response.data.title;
       })
       .catch(error => {
