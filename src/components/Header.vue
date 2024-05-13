@@ -12,12 +12,12 @@ const authStore = useAuthStore();
     <div class="wrapper">
       <nav>
         <ul>
-          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/"><box-icon name='home-circle' type='solid' ></box-icon></RouterLink>
           <RouterLink to="/about">About</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/login">Login</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/register">Register</RouterLink>
           <RouterLink v-if="authStore.isAuthenticated" to="/profile">Profile</RouterLink>
-          <RouterLink v-if="authStore.isAuthenticated" to="/logout">Logout</RouterLink>
+          <RouterLink v-if="authStore.isAuthenticated" to="/logout"><box-icon name='log-out'></box-icon></RouterLink>
         </ul>
       </nav>
     </div>
@@ -63,6 +63,11 @@ nav a {
   display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);
+}
+nav box-icon {
+  fill: hsl(11, 92%, 65%);
+  position: relative;
+  top: 4px;
 }
 
 nav a:first-of-type {

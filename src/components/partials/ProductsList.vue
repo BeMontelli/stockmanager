@@ -122,7 +122,7 @@ let debounce = (fn, wait) => {
   <section class="page__products">
     <div class="container">
       <div class="global__actions">
-        <button class="btn btn-primary update" @click="fetchProducts">Update products</button>
+        <button class="btn btn-primary update" @click="fetchProducts">Update products <box-icon name='refresh' ></box-icon></button>
         <div class="categories">
           <div v-if="categories.length > 0">
             <ul class="row">
@@ -179,6 +179,15 @@ let debounce = (fn, wait) => {
 }
 .page__products .update{
   opacity: 0.65;
+  position: relative;
+  padding-right: 45px;
+}
+.page__products .update box-icon{
+  fill: white;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .page__products .categories{
