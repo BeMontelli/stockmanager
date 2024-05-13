@@ -36,29 +36,34 @@ const fetchProducts = () => {
 
 <template>
   <section class="page__products">
-    <div v-if="products.length > 0">
-      <ul class="row">
-        <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="product in products" :key="product.id">
-          <div class="card mb-3">
-            <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
-            <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">{{ product.description }}</p>
-              <div class="price-line">
-                <span class="price">{{ product.price }} €</span>
-              </div>
-              <div class="actions-line">
-                <a href="#" class="btn btn-primary">-</a>
-                <span class="stock">{{ product.stock }}</span>
-                <a href="#" class="btn btn-primary">+</a>
+    <div class="container">
+      <div class="global__actions">
+        <button class="btn btn-primary" @click="fetchProducts">Update products</button>
+      </div>
+      <div v-if="products.length > 0">
+        <ul class="row">
+          <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="product in products" :key="product.id">
+            <div class="card mb-3">
+              <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+                <div class="price-line">
+                  <span class="price">{{ product.price }} €</span>
+                </div>
+                <div class="actions-line">
+                  <a href="#" class="btn btn-primary">-</a>
+                  <span class="stock">{{ product.stock }}</span>
+                  <a href="#" class="btn btn-primary">+</a>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      No products available.
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        No products available.
+      </div>
     </div>
   </section>
 </template>
@@ -70,6 +75,9 @@ const fetchProducts = () => {
 }
 .page__products ul{
   list-style-type: none;
+  margin: 20px 0 0;
+  width: 100%;
+  padding: 0;
 }
 
 .card .card-title{
