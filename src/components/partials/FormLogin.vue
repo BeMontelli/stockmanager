@@ -18,6 +18,7 @@ const login = async () => {
   try {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/login', formData.value);
     if(response.data.data.user && response.data.data.token) {
+      console.log(response.data.data);
       authStore.setUser(response.data.data.user,response.data.data.token);
       router.push('/');
     } else {
