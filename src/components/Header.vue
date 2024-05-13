@@ -16,6 +16,7 @@ const authStore = useAuthStore();
           <RouterLink to="/about">About</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/login">Login</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/register">Register</RouterLink>
+          <RouterLink v-if="authStore.isAuthenticated" to="/profile">Profile</RouterLink>
           <RouterLink v-if="authStore.isAuthenticated" to="/logout">Logout</RouterLink>
         </ul>
       </nav>
