@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import { useAuthStore } from '@/stores/auth'
 const authStore = useAuthStore();
+if(!authStore.isAuthenticated) router.push('/login');
 
 import { useShopStore } from '@/stores/shop'
 const shopStore = useShopStore();
@@ -15,8 +16,6 @@ let products = ref(shopStore.products);
 onMounted(() => {
   if(!shopStore.products.length) fetchProducts();
 });
-
-if(!authStore.isAuthenticated) router.push('/login');
 
 let selectedCategories = reactive([]);
 const filterProductsByCategories = (id) => {
