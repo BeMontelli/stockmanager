@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, reactive} from 'vue';
 import axios from 'axios';
 
 import { useAuthStore } from '@/stores/auth'
@@ -10,13 +10,40 @@ const shopStore = useShopStore();
 shopStore.initState();
 
 const categories = ref(shopStore.categories);
-const products = ref(shopStore.products);
+let products = ref(shopStore.products);
 
 onMounted(() => {
   if(!shopStore.products.length) fetchProducts();
 });
 
 if(!authStore.isAuthenticated) router.push('/login');
+
+let selectedCategories = reactive([]);
+const filterProductsByCategories = (id) => {
+  if(selectedCategories.includes(id)) {
+    const index = selectedCategories.indexOf(id);
+    if (index !== -1) selectedCategories.splice(index, 1);
+  } else selectedCategories.push(id)
+
+  products.value = products.value.map(prdct => {
+    prdct.filterHideCat = false;
+    if(!selectedCategories.length) return prdct;
+    prdct.filterHideCat = true;
+
+    prdct.categories.forEach(cat => {
+      if(selectedCategories.includes(cat.id)) prdct.filterHideCat = false;
+    })
+
+    return prdct;
+  });
+
+  categories.value = categories.value.map(cat => {
+    cat.catActive = false;
+    if(!selectedCategories.length) return cat;
+    if(selectedCategories.includes(cat.id)) cat.catActive = true;
+    return cat;
+  });
+}
 
 const fetchProducts = () => {
     axios.get('http://127.0.0.1:8000/api/v1/products', {
@@ -44,7 +71,8 @@ const fetchProducts = () => {
           <div v-if="categories.length > 0">
             <ul class="row">
               <li class="" v-for="category in categories" :key="category.id">
-                <button class="btn btn-primary" :data-id="category.id">{{ category.title }}</button>
+                <button class="btn btn-primary" @click="filterProductsByCategories(category.id)"
+                        :class="{ 'filter-active-cat': category.catActive }">{{ category.title }}</button>
               </li>
             </ul>
           </div>
@@ -55,7 +83,8 @@ const fetchProducts = () => {
       </div>
       <div v-if="products.length > 0">
         <ul class="row">
-          <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="product in products" :key="product.id">
+          <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="product in products" :key="product.id"
+              :class="{ 'filter-hide-cat': product.filterHideCat }">
             <div class="card mb-3">
               <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
               <div class="card-body">
@@ -110,6 +139,17 @@ const fetchProducts = () => {
   padding: 0;
   margin: 0 5px 5px 0;
 }
+
+button.filter-active-cat{
+  font-weight: bold;
+  background-color: #86D610;
+  border-color: #86D610;
+}
+
+.filter-hide-cat{
+  display: none !important;
+}
+
 .page__products .categories button{
   margin: 0;
   padding: 5px;
