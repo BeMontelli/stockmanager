@@ -5,10 +5,14 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/auth'
 const authStore = useAuthStore();
 
-const products = ref('');
+import { useShopStore } from '@/stores/shop'
+const shopStore = useShopStore();
+shopStore.initState();
+
+const products = ref(shopStore.products);
 
 onMounted(() => {
-  fetchProducts();
+  if(!shopStore.products.length) fetchProducts();
 });
 
 if(!authStore.isAuthenticated) router.push('/login');
@@ -21,6 +25,8 @@ const fetchProducts = () => {
     })
       .then(response => {
         products.value = response.data;
+        console.log(response.data);
+        shopStore.setProducts(response.data);
       })
       .catch(error => {
         console.error('Error fetching products message:', error);
@@ -60,7 +66,10 @@ const fetchProducts = () => {
 <style scoped>
 
 .page__products{
-  margin-top: 60px;
+  margin-top: 40px;
+}
+.page__products ul{
+  list-style-type: none;
 }
 
 .card .card-title{
@@ -77,7 +86,6 @@ const fetchProducts = () => {
   /*background-position: center center;*/
   background: center center/cover no-repeat;
 }
-
 .card .price-line{
   border-top: solid 1px #d5d5d5;
   text-align: center;
@@ -87,7 +95,6 @@ const fetchProducts = () => {
   font-weight: bold;
   font-size: 18px;
 }
-
 .card .actions-line{
   border-top: solid 1px #d5d5d5;
   padding-top: 15px;

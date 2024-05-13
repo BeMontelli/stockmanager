@@ -15,7 +15,7 @@ authStore.initState();
       <TheTitle v-if="!authStore.isAuthenticated" msg="Home" />
       <WelcomeMsg v-if="!authStore.isAuthenticated" icon="👍"/>
 
-      <TheTitle v-if="authStore.isAuthenticated" msg="Home Logged" />
+      <TheTitle v-if="authStore.isAuthenticated" msg="Products & Stock" />
       <ProductsList v-if="authStore.isAuthenticated"/>
     </section>
   </main>
