@@ -61,6 +61,61 @@ const fetchProducts = () => {
         console.error('Error fetching products message:', error);
       });
 };
+
+let updatedProducts = [];
+let qtyChange = (type='plus',index,id) => {
+  if (products.value[index].stock > 0) {
+    if(type === 'plus') {
+      products.value[index].stock++;
+    } else {
+      products.value[index].stock--;
+    }
+    if(!updatedProducts.includes(id)) updatedProducts.push(id);
+  }
+
+  debounce(function() {
+    console.log("Click debounced => updateProducts");
+    updateProducts();
+  }, 1000)
+}
+const updateProducts = () => {
+  if(!updatedProducts.length) return;
+
+  updatedProducts.forEach(id => {
+    const prdct = products.value.filter(product => product.id === id)[0];
+    if(!prdct) return;
+
+    axios.put('http://127.0.0.1:8000/api/v1/products/'+id, {
+      "name" : prdct.name,
+      "description" : prdct.description,
+      "price" : prdct.price,
+      "stock" : prdct.stock,
+    },{
+      headers: {
+        Authorization: 'Bearer '+authStore.token
+      }
+    })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error('Error fetching products message:', error);
+        });
+  })
+}
+
+// DEBOUNCE QTY CHANGES
+let timer;
+let debounce = (fn, wait) => {
+  console.log(fn, wait,timer);
+  if(timer) {
+    clearTimeout(timer);
+  }
+  const context = this;
+  timer = setTimeout(()=>{
+    fn.apply(context);
+  }, wait);
+}
 </script>
 
 <template>
@@ -84,8 +139,8 @@ const fetchProducts = () => {
       </div>
       <div v-if="products.length > 0">
         <ul class="row">
-          <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="product in products" :key="product.id"
-              :class="{ 'filter-hide-cat': product.filterHideCat }">
+          <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="(product, index) in products" :key="product.id"
+              :class="{ 'filter-hide-cat': product.filterHideCat,'stock-none': product.stock === 0,'stock-low': product.stock <= 10 }">
             <div class="card mb-3">
               <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
               <div class="card-body">
@@ -95,9 +150,9 @@ const fetchProducts = () => {
                   <span class="price">{{ product.price }} €</span>
                 </div>
                 <div class="actions-line">
-                  <a href="#" class="btn btn-primary">-</a>
+                  <button class="btn btn-primary" @click="qtyChange('less',index,product.id)">-</button>
                   <span class="stock">{{ product.stock }}</span>
-                  <a href="#" class="btn btn-primary">+</a>
+                  <button class="btn btn-primary" @click="qtyChange('plus',index,product.id)">+</button>
                 </div>
               </div>
             </div>
@@ -149,6 +204,14 @@ button.filter-active-cat{
 
 .filter-hide-cat{
   display: none !important;
+}
+
+.stock-none{
+  opacity: 0.5;
+}
+
+.stock-low>div{
+  border: solid 2px indianred;
 }
 
 .page__products .categories button{
