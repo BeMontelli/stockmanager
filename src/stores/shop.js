@@ -4,11 +4,25 @@ export const useShopStore = defineStore({
   id: 'shop',
   state: () => ({
     products: [],
+    categories: [],
     orders: [],
   }),
   actions: {
     setProducts(products) {
       this.products = products;
+      this.setCategoriesFromProducts(products);
+    },
+    setCategoriesFromProducts(products) {
+      this.categories = [];
+      const categoriesTitles = products.reduce((acc, product) => {
+        product.categories.forEach(category => {
+          if (!acc.includes(category.title)) {
+            acc.push(category.title);
+            this.categories.push(category);
+          }
+        });
+        return acc;
+      }, []);
       this.persistState();
     },
     setOrders(orders) {
@@ -17,6 +31,7 @@ export const useShopStore = defineStore({
     },
     empty() {
       this.products = [];
+      this.categories = [];
       this.orders = [];
       this.persistState();
     },

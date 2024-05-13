@@ -9,6 +9,7 @@ import { useShopStore } from '@/stores/shop'
 const shopStore = useShopStore();
 shopStore.initState();
 
+const categories = ref(shopStore.categories);
 const products = ref(shopStore.products);
 
 onMounted(() => {
@@ -38,7 +39,19 @@ const fetchProducts = () => {
   <section class="page__products">
     <div class="container">
       <div class="global__actions">
-        <button class="btn btn-primary" @click="fetchProducts">Update products</button>
+        <button class="btn btn-primary update" @click="fetchProducts">Update products</button>
+        <div class="categories">
+          <div v-if="categories.length > 0">
+            <ul class="row">
+              <li class="" v-for="category in categories" :key="category.id">
+                <button class="btn btn-primary" :data-id="category.id">{{ category.title }}</button>
+              </li>
+            </ul>
+          </div>
+          <div v-else>
+            No categories available.
+          </div>
+        </div>
       </div>
       <div v-if="products.length > 0">
         <ul class="row">
@@ -78,6 +91,28 @@ const fetchProducts = () => {
   margin: 20px 0 0;
   width: 100%;
   padding: 0;
+}
+.page__products .update{
+  opacity: 0.65;
+}
+
+.page__products .categories{
+
+}
+.page__products .categories ul{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+.page__products .categories li{
+  width: auto;
+  padding: 0;
+  margin: 0 5px 5px 0;
+}
+.page__products .categories button{
+  margin: 0;
+  padding: 5px;
 }
 
 .card .card-title{
