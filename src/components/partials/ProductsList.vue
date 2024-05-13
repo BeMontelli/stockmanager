@@ -52,9 +52,11 @@ const fetchProducts = () => {
       }
     })
       .then(response => {
-        products.value = response.data;
-        console.log(response.data);
         shopStore.setProducts(response.data);
+        products.value = shopStore.getProducts();
+        categories.value = shopStore.getCategories();
+        selectedCategories = [];
+        console.log(products);
       })
       .catch(error => {
         console.error('Error fetching products message:', error);

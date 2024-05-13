@@ -12,6 +12,9 @@ export const useShopStore = defineStore({
       this.products = products;
       this.setCategoriesFromProducts(products);
     },
+    getProducts() {
+      return this.products;
+    },
     setCategoriesFromProducts(products) {
       this.categories = [];
       const categoriesTitles = products.reduce((acc, product) => {
@@ -25,9 +28,15 @@ export const useShopStore = defineStore({
       }, []);
       this.persistState();
     },
+    getCategories() {
+      return this.categories;
+    },
     setOrders(orders) {
       this.orders = orders;
       this.persistState();
+    },
+    getOrders(orders) {
+       return this.orders;
     },
     empty() {
       this.products = [];
