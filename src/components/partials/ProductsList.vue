@@ -55,7 +55,7 @@ const fetchProducts = () => {
         products.value = shopStore.getProducts();
         categories.value = shopStore.getCategories();
         selectedCategories = [];
-        console.log(products);
+        // console.log(products);
       })
       .catch(error => {
         console.error('Error fetching products message:', error);
@@ -64,17 +64,17 @@ const fetchProducts = () => {
 
 let updatedProducts = [];
 let qtyChange = (type='plus',index,id) => {
-  if (products.value[index].stock > 0) {
-    if(type === 'plus') {
-      products.value[index].stock++;
-    } else {
+  if(type === 'plus') {
+    products.value[index].stock++;
+  } else {
+    if (products.value[index].stock > 0) {
       products.value[index].stock--;
     }
-    if(!updatedProducts.includes(id)) updatedProducts.push(id);
   }
+  if(!updatedProducts.includes(id)) updatedProducts.push(id);
 
   debounce(function() {
-    console.log("Click debounced => updateProducts");
+    // console.log("Click debounced => updateProducts");
     updateProducts();
   }, 1000)
 }
@@ -96,7 +96,7 @@ const updateProducts = () => {
       }
     })
         .then(response => {
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {
           console.error('Error fetching products message:', error);
@@ -107,7 +107,7 @@ const updateProducts = () => {
 // DEBOUNCE QTY CHANGES
 let timer;
 let debounce = (fn, wait) => {
-  console.log(fn, wait,timer);
+  // console.log(fn, wait,timer);
   if(timer) {
     clearTimeout(timer);
   }
