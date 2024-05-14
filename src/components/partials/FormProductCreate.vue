@@ -8,6 +8,7 @@ const router = useRouter();
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 authStore.initState();
+if(!authStore.isAuthenticated) router.push('/');
 
 import { useShopStore } from '@/stores/shop.js';
 const shopStore = useShopStore();

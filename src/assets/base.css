@@ -59,6 +59,7 @@
 }
 
 body {
+  accent-color: hsl(11, 92%, 65%);
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);

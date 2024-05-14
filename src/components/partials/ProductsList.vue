@@ -155,6 +155,7 @@ let debounce = (fn, wait) => {
           <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="(product, index) in products" :key="product.id"
               :class="{ 'filter-hide-name': product.filterHideName,'filter-hide-cat': product.filterHideCat,'stock-none': product.stock === 0,'stock-low': product.stock <= 10 }">
             <div class="card mb-3">
+              <RouterLink class="card-edit" :to="'/product-edit/' + product.id"><box-icon name='pencil' type='solid' ></box-icon></RouterLink>
               <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
               <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
@@ -245,11 +246,35 @@ button.filter-active-cat{
   padding: 5px;
 }
 
+.card{
+  position: relative;
+}
 .card .card-title{
   height: 48px;
 }
 .card .card-text{
   height: 55px;
+}
+.card-edit{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border-radius: 100%;
+  height: 35px;
+  width: 35px;
+  line-height: 35px;
+  padding-top: 5px;
+  padding-left: 6px;
+  transition: all ease 0.5s;
+  opacity: 0;
+}
+.card:hover .card-edit{
+  background-color: hsl(11, 92%, 65%);
+  opacity: 1;
+  transition: all ease 0.5s;
+}
+.card-edit box-icon{
+  fill: white;
 }
 .card-img{
   width: 100%;

@@ -2,23 +2,31 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
 const router = useRouter();
+const route = useRoute();
+const productId = route.params.id;
 
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 authStore.initState();
+if(!authStore.isAuthenticated) router.push('/');
 
 import { useShopStore } from '@/stores/shop.js';
 const shopStore = useShopStore();
 shopStore.initState();
 
+const product = shopStore.getProducts().filter(prdct => {
+  return Number(prdct.id) === Number(productId);
+})[0];
+if(!product) router.push('/');
+
 const productData = ref({
-  name: '',
-  description: '',
-  price: null,
-  stock: null,
-  categories: [],
+  name: product.name,
+  description: product.description,
+  price: product.price,
+  stock: product.stock,
+  categories: product.categories.map(category => category.id),
   imagefile: null
 });
 
