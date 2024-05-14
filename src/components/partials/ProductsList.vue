@@ -63,9 +63,19 @@ const fetchProducts = () => {
       .then(response => {
         shopStore.setProducts(response.data);
         products.value = shopStore.getProducts();
+      })
+      .catch(error => {
+        console.error('Error fetching products message:', error);
+      });
+    axios.get(api.url+'v1/categories', {
+      headers: {
+        Authorization: 'Bearer '+authStore.token
+      }
+    })
+      .then(response => {
+        shopStore.setCategories(response.data);
         categories.value = shopStore.getCategories();
         selectedCategories = [];
-        // console.log(products);
       })
       .catch(error => {
         console.error('Error fetching products message:', error);

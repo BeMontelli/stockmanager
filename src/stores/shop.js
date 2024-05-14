@@ -10,13 +10,12 @@ export const useShopStore = defineStore({
   actions: {
     setProducts(products) {
       this.products = products;
-      this.setCategoriesFromProducts(products);
+      //this.setCategoriesFromProducts(products);
     },
     getProducts() {
       return this.products;
     },
     setCategoriesFromProducts(products) {
-      this.categories = [];
       const categoriesTitles = products.reduce((acc, product) => {
         product.categories.forEach(category => {
           if (!acc.includes(category.title)) {
@@ -27,6 +26,9 @@ export const useShopStore = defineStore({
         return acc;
       }, []);
       this.persistState();
+    },
+    setCategories(categories) {
+      this.categories = categories;
     },
     getCategories() {
       return this.categories;
