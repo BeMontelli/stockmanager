@@ -7,12 +7,13 @@ const authStore = useAuthStore();
 
 <template>
   <header>
+    <RouterLink to="/">
     <img alt="Vue logo" class="logo" src="@/assets/stockmanager-logo.png" width="70" height="70" />
+    </RouterLink>
 
     <div class="wrapper">
       <nav>
         <ul>
-          <RouterLink to="/"><box-icon name='home-circle' type='solid' ></box-icon></RouterLink>
           <RouterLink to="/about">About</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/login">Login</RouterLink>
           <RouterLink v-if="!authStore.isAuthenticated" to="/register">Register</RouterLink>
