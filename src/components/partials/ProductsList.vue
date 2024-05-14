@@ -44,6 +44,14 @@ const filterProductsByCategories = (id) => {
   });
 }
 
+const searchQuery = ref('');
+const filterProductsByName = () => {
+  products.value.map(product => {
+    product.filterHideName = !product.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    return product;
+  });
+}
+
 const fetchProducts = () => {
     axios.get('http://127.0.0.1:8000/api/v1/products', {
       headers: {
@@ -122,7 +130,12 @@ let debounce = (fn, wait) => {
   <section class="page__products">
     <div class="container">
       <div class="global__actions">
-        <button class="btn btn-primary update" @click="fetchProducts">Update products <box-icon name='refresh' ></box-icon></button>
+        <div class="row">
+          <button class="col-3 mb-3 btn btn-primary update" @click="fetchProducts">Update products <box-icon name='refresh' ></box-icon></button>
+          <div class="col mb-3 input-group flex-nowrap">
+            <input @input="filterProductsByName" v-model="searchQuery" class="form-control" type="text" name="search" value="" aria-label="Search product name" placeholder="Search product name ..." aria-describedby="addon-wrapping">
+          </div>
+        </div>
         <div class="categories">
           <div v-if="categories.length > 0">
             <ul class="row">
@@ -140,7 +153,7 @@ let debounce = (fn, wait) => {
       <div v-if="products.length > 0">
         <ul class="row">
           <li class="col-lg-3 col-md-4 col-sm-6 col-12" v-for="(product, index) in products" :key="product.id"
-              :class="{ 'filter-hide-cat': product.filterHideCat,'stock-none': product.stock === 0,'stock-low': product.stock <= 10 }">
+              :class="{ 'filter-hide-name': product.filterHideName,'filter-hide-cat': product.filterHideCat,'stock-none': product.stock === 0,'stock-low': product.stock <= 10 }">
             <div class="card mb-3">
               <div class="card-img" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
               <div class="card-body">
@@ -177,6 +190,10 @@ let debounce = (fn, wait) => {
   width: 100%;
   padding: 0;
 }
+.global__actions .row{
+  width: 100%;
+  margin: 0;
+}
 .page__products .update{
   opacity: 0.65;
   position: relative;
@@ -211,7 +228,7 @@ button.filter-active-cat{
   border-color: #86D610;
 }
 
-.filter-hide-cat{
+.filter-hide-cat,.filter-hide-name{
   display: none !important;
 }
 
