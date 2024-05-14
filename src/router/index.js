@@ -5,7 +5,8 @@ import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProfileView from '../views/ProfileView.vue'
-import ProductCreate from '../views/ProductCreate.vue'
+import ProductCreateView from '../views/ProductCreateView.vue'
+import ProductEditView from '../views/ProductEditView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
@@ -48,7 +49,13 @@ const router = createRouter({
     {
       path: '/product-create',
       name: 'product-create',
-      component: ProductCreate
+      component: ProductCreateView
+    },
+    {
+
+      path: '/product-edit/:id',
+      name: 'product-edit',
+      component: ProductEditView
     }
   ]
 })

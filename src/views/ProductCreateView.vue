@@ -1,13 +1,13 @@
 <script setup>
 import TheTitle from "@/components/partials/TheTitle.vue";
-import FormProduct from '@/components/partials/FormProduct.vue';
+import FormProductCreate from '@/components/partials/FormProductCreate.vue';
 </script>
 
 <template>
   <section class="product__create">
     <TheTitle msg="Create Product" />
 
-    <FormProduct />
+    <FormProductCreate />
   </section>
 </template>
 
