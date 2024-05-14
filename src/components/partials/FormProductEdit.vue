@@ -1,4 +1,6 @@
 <script setup>
+import {api} from '@/utils/api'
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -39,7 +41,7 @@ const errors = ref([]);
 const editProduct = async () => {
   productData.value.price = parseFloat(productData.value.price).toFixed(2);
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/products/'+product.id+'?_method=put', productData.value,{
+    const response = await axios.post(api.url+'v1/products/'+product.id+'?_method=put', productData.value,{
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: 'Bearer '+authStore.token

@@ -1,4 +1,6 @@
 <script setup>
+import {api} from '@/utils/api'
+
 import {ref, onMounted, reactive} from 'vue';
 import axios from 'axios';
 
@@ -53,7 +55,7 @@ const filterProductsByName = () => {
 }
 
 const fetchProducts = () => {
-    axios.get('http://127.0.0.1:8000/api/v1/products', {
+    axios.get(api.url+'v1/products', {
       headers: {
         Authorization: 'Bearer '+authStore.token
       }
@@ -93,7 +95,7 @@ const updateProducts = () => {
     const prdct = products.value.filter(product => product.id === id)[0];
     if(!prdct) return;
 
-    axios.put('http://127.0.0.1:8000/api/v1/products/'+id, {
+    axios.put(api.url+'v1/products/'+id, {
       "name" : prdct.name,
       "description" : prdct.description,
       "price" : prdct.price,

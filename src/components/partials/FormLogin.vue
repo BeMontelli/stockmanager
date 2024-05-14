@@ -1,4 +1,6 @@
 <script setup>
+import {api} from '@/utils/api'
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -16,7 +18,7 @@ const errors = ref([]);
 
 const login = async () => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/login', formData.value);
+    const response = await axios.post(api.url+'v1/login', formData.value);
     if(response.data.data.user && response.data.data.token) {
       authStore.setUser(response.data.data.user,response.data.data.token);
       router.push('/');

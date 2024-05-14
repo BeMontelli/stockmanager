@@ -1,4 +1,6 @@
 <script setup>
+import {api} from '@/utils/api'
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -9,7 +11,7 @@ onMounted(() => {
 });
 
 const fetchWelcomeMessage = () => {
-  axios.get('http://127.0.0.1:8000/api/v1/welcome')
+  axios.get(api.url+'v1/welcome')
       .then(response => {
         welcomeMessage.value = response.data.title;
       })

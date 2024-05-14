@@ -1,4 +1,6 @@
 <script setup>
+import {api} from '@/utils/api'
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -20,7 +22,7 @@ const errors = ref([]);
 
 const updateUser = async () => {
   try {
-    const response = await axios.put('http://127.0.0.1:8000/api/v1/users/'+authStore.user.id, formData.value,{
+    const response = await axios.put(api.url+'v1/users/'+authStore.user.id, formData.value,{
       headers: {
         Authorization: 'Bearer '+authStore.token
       }
