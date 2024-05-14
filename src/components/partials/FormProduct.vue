@@ -9,37 +9,54 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 authStore.initState();
 
-const formData = ref({
-  name: authStore.user.name,
-  email: authStore.user.email,
-  password: '',
-  password_confirmation: '',
+import { useShopStore } from '@/stores/shop.js';
+const shopStore = useShopStore();
+shopStore.initState();
+
+const productData = ref({
+  name: '',
+  description: '',
+  price: null,
+  stock: null,
+  categories: [],
+  image: null
 });
+
+const categories = ref(shopStore.getCategories());
+
 const success = ref([]);
 const errors = ref([]);
 
-const updateUser = async () => {
-  try {
-    const response = await axios.put('http://127.0.0.1:8000/api/v1/users/'+authStore.user.id, formData.value,{
-      headers: {
-        Authorization: 'Bearer '+authStore.token
-      }
-    });
-    console.log(response);
-    if(response.data.data) {
-      authStore.setUser(response.data.data,authStore.token);
-      success.value = ["User updated !"];
-    } else {
-      errors.value = ["Error, please retry later !"];
-    }
-  } catch (err) {
-    console.error('Error update user :', err);
-    errors.value = [err.message];
-    if(err.response.data.errors) {
-      errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
-    }
-  }
+const createProduct = async () => {
+  console.log(productData);
+  // try {
+  //   const response = await axios.post('http://127.0.0.1:8000/api/v1/products/', productData.value,{
+  //     headers: {
+  //       Authorization: 'Bearer '+authStore.token
+  //     }
+  //   });
+  //   console.log(response);
+  //   if(response.data.data) {
+  //     authStore.setUser(response.data.data,authStore.token);
+  //     success.value = ["Product created !"];
+  //   } else {
+  //     errors.value = ["Error, please retry later !"];
+  //   }
+  // } catch (err) {
+  //   console.error('Error update user :', err);
+  //   errors.value = [err.message];
+  //   if(err.response.data.errors) {
+  //     errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
+  //   }
+  // }
 };
+const onFileChange = (event) => {
+  const file = event.target.files[0];
+  console.log("file");
+  console.log(file);
+  productData.image = file;
+}
+
 </script>
 
 <template>
@@ -47,28 +64,39 @@ const updateUser = async () => {
 
     <div class="row">
       <div class="col-md-12">
-        <form class="login-form" @submit.prevent="updateUser">
+        <form class="product-form" @submit.prevent="createProduct" enctype="multipart/form-data">
           <div class="form-group mt-2">
-            <label for="email">Email</label>
-            <input v-model="formData.email" type="email" class="form-control dark-input" id="email" name="email" placeholder="Enter email">
+            <label for="productName">Product Name *</label>
+            <input v-model="productData.name" type="text" class="form-control dark-input" id="productName" name="productName" placeholder="Enter product name" required>
           </div>
 
           <div class="form-group mt-2">
-            <label for="password">Name</label>
-            <input v-model="formData.name" type="text" class="form-control dark-input" id="name" name="name" placeholder="Your Name">
+            <label for="productDescription">Product Description *</label>
+            <input v-model="productData.description" type="text" class="form-control dark-input" id="productDescription" name="productDescription" placeholder="Enter product description" required>
           </div>
 
-          <div class="form-group mt-4">
-            <p>Confirm your password to update profile or change</p>
+          <div class="form-group mt-2">
+            <label for="productPrice">Price *</label>
+            <input v-model.number="productData.price" type="number" min="0.05" max="1000" step="0.01" class="form-control dark-input" id="productPrice" name="productPrice" placeholder="Enter product price" required>
           </div>
 
-          <div class="form-group mt-1">
-            <label for="password">Password</label>
-            <input v-model="formData.password" type="password" class="form-control dark-input" id="password" name="password" placeholder="Password">
+          <div class="form-group mt-2">
+            <label for="productStock">Stock *</label>
+            <input v-model.number="productData.stock" type="number" min="0" max="1000" class="form-control dark-input" id="productStock" name="productStock" placeholder="Enter product stock" required>
           </div>
-          <div class="form-group mt-2 mb-4">
-            <label for="password">Password Confirmation</label>
-            <input v-model="formData.password_confirmation" type="password" class="form-control dark-input" id="password_confirmation" name="password_confirmation" placeholder="Same password">
+
+          <div class="form-group mt-2">
+            <label>Categories</label>
+            <div class="categories__list">
+              <div class="category__item" v-for="(category, index) in categories" :key="index">
+                <label><input type="checkbox" :value="category.id" v-model="productData.categories"> {{ category.title }}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label for="productImage">Image *</label>
+            <input type="file" @change="onFileChange($event)" class="form-control dark-input" id="productImage" name="productImage" accept="image/jpeg,image/png,image/jpg" required>
           </div>
 
           <div v-if="errors.length > 0" class="errors">
@@ -92,7 +120,7 @@ const updateUser = async () => {
           </div>
 
           <div class="form-group mt-4 mx-auto d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-primary btn-block btn-lg">Update</button>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Create Product</button>
           </div>
         </form>
       </div>
@@ -105,4 +133,18 @@ const updateUser = async () => {
 .error {
   color: red;
 }
+.categories__list{
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.category__item{
+  width: auto;
+  padding: 0 10px 0 0;
+}
+.category__item input{
+  width: auto;
+}
+
 </style>
