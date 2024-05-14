@@ -25,7 +25,7 @@ const updateUser = async () => {
         Authorization: 'Bearer '+authStore.token
       }
     });
-    console.log(response);
+
     if(response.data.data) {
       authStore.setUser(response.data.data,authStore.token);
       success.value = ["User updated !"];

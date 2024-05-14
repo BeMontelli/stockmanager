@@ -19,7 +19,7 @@ const productData = ref({
   price: null,
   stock: null,
   categories: [],
-  image: null
+  imagefile: null
 });
 
 const categories = ref(shopStore.getCategories());
@@ -28,33 +28,29 @@ const success = ref([]);
 const errors = ref([]);
 
 const createProduct = async () => {
-  console.log(productData);
-  // try {
-  //   const response = await axios.post('http://127.0.0.1:8000/api/v1/products/', productData.value,{
-  //     headers: {
-  //       Authorization: 'Bearer '+authStore.token
-  //     }
-  //   });
-  //   console.log(response);
-  //   if(response.data.data) {
-  //     authStore.setUser(response.data.data,authStore.token);
-  //     success.value = ["Product created !"];
-  //   } else {
-  //     errors.value = ["Error, please retry later !"];
-  //   }
-  // } catch (err) {
-  //   console.error('Error update user :', err);
-  //   errors.value = [err.message];
-  //   if(err.response.data.errors) {
-  //     errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
-  //   }
-  // }
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/api/v1/products/', productData.value,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer '+authStore.token
+      }
+    });
+    if(response.data.data) {
+      authStore.setUser(response.data.data,authStore.token);
+      success.value = ["Product created !"];
+    } else {
+      errors.value = ["Error, please retry later !"];
+    }
+  } catch (err) {
+    console.error('Error update user :', err);
+    errors.value = [err.message];
+    if(err.response.data.errors) {
+      errors.value = Object.values(err.response.data.errors).flatMap(errors => errors);
+    }
+  }
 };
 const onFileChange = (event) => {
-  const file = event.target.files[0];
-  console.log("file");
-  console.log(file);
-  productData.image = file;
+  productData.value.imagefile = event.target.files[0];
 }
 
 </script>
