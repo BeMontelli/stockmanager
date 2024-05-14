@@ -24,8 +24,8 @@ if(!product) router.push('/');
 const productData = ref({
   name: product.name,
   description: product.description,
-  price: product.price,
-  stock: product.stock,
+  price: parseFloat(product.price).toFixed(2),
+  stock: parseInt(product.stock),
   categories: product.categories.map(category => category.id),
   imagefile: null
 });
@@ -35,17 +35,18 @@ const categories = ref(shopStore.getCategories());
 const success = ref([]);
 const errors = ref([]);
 
-const createProduct = async () => {
+const editProduct = async () => {
+  productData.value.price = parseFloat(productData.value.price).toFixed(2);
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/products/', productData.value,{
+    const response = await axios.post('http://127.0.0.1:8000/api/v1/products/'+product.id+'?_method=put', productData.value,{
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: 'Bearer '+authStore.token
       }
     });
     if(response.data.data) {
-      authStore.setUser(response.data.data,authStore.token);
-      success.value = ["Product created !"];
+      //authStore.setUser(response.data.data,authStore.token);
+      success.value = ["Product updated !"];
     } else {
       errors.value = ["Error, please retry later !"];
     }
@@ -68,7 +69,7 @@ const onFileChange = (event) => {
 
     <div class="row">
       <div class="col-md-12">
-        <form class="product-form" @submit.prevent="createProduct" enctype="multipart/form-data">
+        <form class="product-form" @submit.prevent="editProduct" enctype="multipart/form-data">
           <div class="form-group mt-2">
             <label for="productName">Product Name *</label>
             <input v-model="productData.name" type="text" class="form-control dark-input" id="productName" name="productName" placeholder="Enter product name" required>
@@ -81,7 +82,7 @@ const onFileChange = (event) => {
 
           <div class="form-group mt-2">
             <label for="productPrice">Price *</label>
-            <input v-model.number="productData.price" type="number" min="0.05" max="1000" step="0.01" class="form-control dark-input" id="productPrice" name="productPrice" placeholder="Enter product price" required>
+            <input v-model="productData.price" type="number" min="0.05" max="1000" step="0.01" class="form-control dark-input" id="productPrice" name="productPrice" placeholder="Enter product price" required>
           </div>
 
           <div class="form-group mt-2">
@@ -100,7 +101,8 @@ const onFileChange = (event) => {
 
           <div class="form-group mt-2">
             <label for="productImage">Image *</label>
-            <input type="file" @change="onFileChange($event)" class="form-control dark-input" id="productImage" name="productImage" accept="image/jpeg,image/png,image/jpg" required>
+            <div class="file__img" v-if="product.image" :style="{ backgroundImage: 'url(http://127.0.0.1:8000/' + product.image + ')' }"></div>
+            <input type="file" @change="onFileChange($event)" class="form-control dark-input" id="productImage" name="productImage" accept="image/jpeg,image/png,image/jpg">
           </div>
 
           <div v-if="errors.length > 0" class="errors">
@@ -124,7 +126,7 @@ const onFileChange = (event) => {
           </div>
 
           <div class="form-group mt-4 mx-auto d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-primary btn-block btn-lg">Create Product</button>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Edit Product</button>
           </div>
         </form>
       </div>
@@ -137,6 +139,17 @@ const onFileChange = (event) => {
 .error {
   color: red;
 }
+
+.file__img{
+  border-radius: 10px;
+  margin: 10px 0;
+  display: block;
+  width: 100%;
+  height: 250px;
+  background: center center/cover no-repeat;
+  cursor: pointer;
+}
+
 .categories__list{
   display: flex;
   align-items: baseline;

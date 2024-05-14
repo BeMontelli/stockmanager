@@ -37,7 +37,7 @@ const createProduct = async () => {
       }
     });
     if(response.data.data) {
-      authStore.setUser(response.data.data,authStore.token);
+      //authStore.setUser(response.data.data,authStore.token);
       success.value = ["Product created !"];
     } else {
       errors.value = ["Error, please retry later !"];
