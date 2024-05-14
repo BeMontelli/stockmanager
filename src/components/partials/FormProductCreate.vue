@@ -14,6 +14,7 @@ import { useShopStore } from '@/stores/shop.js';
 const shopStore = useShopStore();
 shopStore.initState();
 
+let products = shopStore.getProducts();
 const productData = ref({
   name: '',
   description: '',
@@ -29,6 +30,7 @@ const success = ref([]);
 const errors = ref([]);
 
 const createProduct = async () => {
+  productData.value.price = parseFloat(productData.value.price).toFixed(2);
   try {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/products/', productData.value,{
       headers: {
@@ -37,7 +39,8 @@ const createProduct = async () => {
       }
     });
     if(response.data.data) {
-      //authStore.setUser(response.data.data,authStore.token);
+      products.push(response.data.data);
+      shopStore.setProducts(products);
       success.value = ["Product created !"];
     } else {
       errors.value = ["Error, please retry later !"];

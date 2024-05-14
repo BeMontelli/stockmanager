@@ -16,7 +16,8 @@ import { useShopStore } from '@/stores/shop.js';
 const shopStore = useShopStore();
 shopStore.initState();
 
-const product = shopStore.getProducts().filter(prdct => {
+let products = shopStore.getProducts();
+const product = products.filter(prdct => {
   return Number(prdct.id) === Number(productId);
 })[0];
 if(!product) router.push('/');
@@ -45,7 +46,13 @@ const editProduct = async () => {
       }
     });
     if(response.data.data) {
-      //authStore.setUser(response.data.data,authStore.token);
+      products = products.map(prdct => {
+        if (prdct.id === product.id) {
+          return response.data.data;
+        }
+        else return prdct;
+      })
+      shopStore.setProducts(products);
       success.value = ["Product updated !"];
     } else {
       errors.value = ["Error, please retry later !"];
