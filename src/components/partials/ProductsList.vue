@@ -93,6 +93,8 @@ let qtyChange = (type='plus',index,id) => {
   }
   if(!updatedProducts.includes(id)) updatedProducts.push(id);
 
+  notifs(true,true,false,false);
+
   debounce(function() {
     // console.log("Click debounced => updateProducts");
     updateProducts();
@@ -116,10 +118,25 @@ const updateProducts = () => {
       }
     })
         .then(response => {
+          notifs(true,false,true,false);
           // console.log(response);
+          setTimeout(() => {
+            notifs(false,false,true,false);
+          }, 2000);
+          setTimeout(() => {
+            notifs(false,false,false,false);
+          }, 2500);
         })
         .catch(error => {
+          notifs(true,false,false,true);
           console.error('Error fetching products message:', error);
+
+          setTimeout(() => {
+            notifs(false,false,false,true);
+          }, 2000);
+          setTimeout(() => {
+            notifs(false,false,false,false);
+          }, 2500);
         });
   })
 }
@@ -136,9 +153,32 @@ let debounce = (fn, wait) => {
     fn.apply(context);
   }, wait);
 }
+
+let isActive = ref(false);
+let isLoading = ref(false);
+let isSuccess = ref(false);
+let isError = ref(false);
+const notifs = (active = false, loading = false, success = false, error = false) => {
+  isActive.value = active;
+  isLoading.value = loading;
+  isSuccess.value = success;
+  isError.value = error;
+}
+
 </script>
 
 <template>
+  <section class="notifications" :class="{ 'active': isActive,'loading': isLoading,'success': isSuccess,'error': isError, }">
+    <div class="container">
+      <div class="bullet loading" v-if="isLoading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div class="bullet success" v-if="isSuccess"><box-icon name='check'></box-icon></div>
+      <div class="bullet error" v-if="isError"><box-icon name='x'></box-icon></div>
+    </div>
+  </section>
   <section class="page__products">
     <div class="container">
       <div class="global__actions">
@@ -193,6 +233,59 @@ let debounce = (fn, wait) => {
 </template>
 
 <style scoped>
+
+.notifications{
+  position: fixed;
+  z-index: 300;
+  bottom: 0;
+  transition: all ease 0.5s;
+}
+.notifications.active{
+  bottom: 60px;
+  transition: all ease 0.5s;
+}
+.notifications.loading .loading{
+  opacity: 1;
+  transition: all ease 0.5s;
+}
+.notifications.success .success{
+  opacity: 1;
+  transition: all ease 0.5s;
+}
+.notifications.error .error{
+  opacity: 1;
+  transition: all ease 0.5s;
+}
+
+.notifications .container{
+  position: relative;
+}
+.notifications .spinner-border{
+  width: 20px;
+  height: 20px;
+}
+.notifications .bullet{
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 15px;
+  height: 45px;
+  width: 45px;
+  border-radius: 5px;
+  color: var(--vt-c-white-soft);
+  fill: var(--vt-c-white-soft);
+  background-color: var(--vt-c-indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ease 0.5s;
+}
+.notifications .success{
+  background-color: #86D610;
+}
+.notifications .error{
+  background-color: hsl(11, 74%, 46%);
+}
 
 .page__products{
   margin-top: 40px;

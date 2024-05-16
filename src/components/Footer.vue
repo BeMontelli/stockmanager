@@ -13,6 +13,7 @@
 <style scoped>
 footer{
   margin-top: 40px;
+  margin-bottom: 60px;
 }
 footer .logo{
   text-align: center;
