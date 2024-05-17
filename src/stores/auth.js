@@ -14,11 +14,12 @@ export const useAuthStore = defineStore({
       this.isAuthenticated = true;
       this.persistState();
     },
-    logout() {
+    logout(router) {
       this.user = null;
       this.token = null;
       this.isAuthenticated = false;
       this.persistState();
+      router.push('/');
     },
     persistState() {
       localStorage.setItem('authStore', JSON.stringify(this.$state));

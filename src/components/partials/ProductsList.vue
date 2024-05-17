@@ -1,12 +1,15 @@
 <script setup>
 import {api} from '@/utils/api'
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 import {ref, onMounted, reactive} from 'vue';
 import axios from 'axios';
 
 import { useAuthStore } from '@/stores/auth'
 const authStore = useAuthStore();
-if(!authStore.isAuthenticated) router.push('/login');
+if(!authStore.isAuthenticated) authStore.logout(router);
 
 import { useShopStore } from '@/stores/shop'
 const shopStore = useShopStore();
@@ -55,6 +58,7 @@ const filterProductsByName = () => {
 }
 
 const fetchProducts = () => {
+
     axios.get(api.url+'v1/products', {
       headers: {
         Authorization: 'Bearer '+authStore.token
@@ -65,8 +69,10 @@ const fetchProducts = () => {
         products.value = shopStore.getProducts();
       })
       .catch(error => {
+        if(error.response.status === 401) authStore.logout(router);
         console.error('Error fetching products message:', error);
       });
+
     axios.get(api.url+'v1/categories', {
       headers: {
         Authorization: 'Bearer '+authStore.token
@@ -78,7 +84,8 @@ const fetchProducts = () => {
         selectedCategories = [];
       })
       .catch(error => {
-        console.error('Error fetching products message:', error);
+        if(error.response.status === 401) authStore.logout(router);
+        console.error('Error fetching categories message:', error,);
       });
 };
 
